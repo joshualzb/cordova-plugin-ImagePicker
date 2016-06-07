@@ -1,0 +1,6 @@
+# Intellij
+*.iml
+.idea/workspace.xml
+.gitignore
+.idea/
+src/android/.idea/

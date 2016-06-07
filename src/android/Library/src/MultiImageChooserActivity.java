@@ -102,16 +102,16 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
 
     private int maxImages;
     private int maxImageCount;
-
     private int desiredWidth;
     private int desiredHeight;
-    private int quality;
 
+    private int quality;
     private GridView gridView;
 
     private final ImageFetcher fetcher = new ImageFetcher();
 
-    private int selectedColor = 0xff32b2e1;
+    private int selectedColor = 0x66ff4081;
+
     private boolean shouldRequestThumb = true;
 
     private FakeR fakeR;
@@ -205,12 +205,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
             } else {
                 maxImages--;
                 ImageView imageView = (ImageView) view;
-                if (android.os.Build.VERSION.SDK_INT >= 16) {
-                    imageView.setImageAlpha(128);
-                } else {
-                    imageView.setAlpha(128);
-                }
-                view.setBackgroundColor(selectedColor);
+                addBadge(imageView);
             }
         } else {
             fileNames.remove(name);
@@ -305,7 +300,6 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         }
     }
 
-
     /*********************
      * Helper Methods
      ********************/
@@ -388,7 +382,6 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         return ret;
     }
 
-
     /*********************
      * Nested Classes
      ********************/
@@ -403,8 +396,8 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         }
     }
 
-
     private class ImageAdapter extends BaseAdapter {
+
         private final Bitmap mPlaceHolderBitmap;
 
         public ImageAdapter(Context c) {
@@ -457,28 +450,16 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
             final int id = imagecursor.getInt(image_column_index);
             final int rotate = imagecursor.getInt(image_column_orientation);
             if (isChecked(pos)) {
-                if (android.os.Build.VERSION.SDK_INT >= 16) {
-                    imageView.setImageAlpha(128);
-                } else {
-                    imageView.setAlpha(128);
-                }
-                imageView.setBackgroundColor(selectedColor);
+                addBadge(imageView);
             } else {
-                if (android.os.Build.VERSION.SDK_INT >= 16) {
-                    imageView.setImageAlpha(255);
-                } else {
-                    imageView.setAlpha(255);
-                }
-                imageView.setBackgroundColor(Color.TRANSPARENT);
+                removeBadge(imageView);
             }
             if (shouldRequestThumb) {
                 fetcher.fetch(Integer.valueOf(id), imageView, colWidth, rotate);
             }
-
             return imageView;
         }
     }
-
 
     private class ResizeImagesTask extends AsyncTask<Set<Entry<String, Integer>>, Void, ArrayList<String>> {
         private Exception asyncTaskError = null;
@@ -514,7 +495,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
                             try {
                                 bmp = this.tryToGetBitmap(file, options, rotate, false);
                             } catch (OutOfMemoryError e2) {
-                                throw new IOException("Unable to load image into memory.");
+                                throw new IOException("读取文件过程中发生错误");
                             }
                         }
                     } else {
@@ -531,7 +512,7 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
                                 try {
                                     bmp = this.tryToGetBitmap(file, options, rotate, false);
                                 } catch (OutOfMemoryError e3) {
-                                    throw new IOException("Unable to load image into memory.");
+                                    throw new IOException("读取文件过程中发生错误");
                                 }
                             }
                         }
@@ -692,5 +673,34 @@ public class MultiImageChooserActivity extends Activity implements OnItemClickLi
         }
 
         return scale;
+    }
+
+    /**
+     * add badge
+     *
+     * @param view
+     */
+    private void addBadge(ImageView view) {
+
+        if (android.os.Build.VERSION.SDK_INT >= 16) {
+            view.setImageAlpha(128);
+        } else {
+            view.setAlpha(128);
+        }
+        view.setBackgroundColor(selectedColor);
+    }
+
+    /**
+     * remove badge
+     *
+     * @param view
+     */
+    private void removeBadge(ImageView view) {
+        if (android.os.Build.VERSION.SDK_INT >= 16) {
+            view.setImageAlpha(255);
+        } else {
+            view.setAlpha(255);
+        }
+        view.setBackgroundColor(Color.TRANSPARENT);
     }
 }

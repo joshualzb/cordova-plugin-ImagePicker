@@ -66,7 +66,7 @@ public class ImagePicker extends CordovaPlugin {
 			JSONArray res = new JSONArray();
 			this.callbackContext.success(res);
 		} else {
-			this.callbackContext.error("No images selected");
+			this.callbackContext.error("没有选择图片");
 		}
 	}
 }
