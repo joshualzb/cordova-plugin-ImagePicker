@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="multi_app_name">选择多张</string>
+    <string name="free_version_label">图片剩余: %d</string>
+    <string name="error_database">读取过程中发生错误</string>
+    <string name="requesting_thumbnails">正在生成缩略图,请耐心等待</string>
+    <string name="discard">取消</string>
+    <string name="done">确定</string>
+</resources>
